@@ -9,7 +9,7 @@
 	import { cn } from '$lib/utils';
 	import { derived } from 'svelte/store';
 	import Divider from '$lib/components/ui/divider/divider.svelte';
-	import { fetchPost } from '$lib/fetch-util';
+	import { fetchGet, fetchPost } from '$lib/fetch-util';
 	import { toast } from 'svelte-sonner';
 	export let isCollapsed;
 
@@ -47,54 +47,75 @@
 		return $page.url.searchParams.get('status') || 'all';
 	});
 
+	const showToastError = (name) => {
+		toast.error(
+			`Oops! We ran into an issue uploading your file "${name}". Please check your connection and try again.`
+		);
+	};
+
 	const handleFileChange = async (event) => {
 		isImgLoading = true;
 		const target = event.target;
 		const files = target.files;
 		if (files && files.length > 0) {
 			const file = files[0];
-			try {
-				if (file) {
-					const { name } = file;
-					const reader = new FileReader();
+			const { name } = file;
+			const { data, error } = await fetchPost({
+				url: `/api/upload/`,
+				params: { name }
+			});
 
-					reader.onload = async () => {
-						const { data, error } = await fetchPost({
-							url: '/api/document',
-							params: {
-								name,
-								data: reader.result
-							}
-						});
+			//console.log({ data, error });
 
-						if (error) {
-							toast.error(
-								`Oops! We ran into an issue uploading your file "${name}". Please check your connection and try again.`
-							);
-						} else {
-							toast.success(
-								`Great! "${name}" uploaded successfully. Parsing may take around 3-5 minutes, so feel free to continue working while we process your file.`
-							);
-						}
-
-						isImgLoading = false;
-					};
-
-					reader.readAsDataURL(file);
-				}
-			} catch (error) {
-				console.error(error);
+			if (error) {
+				showToastError(name);
 				isImgLoading = false;
+			}
+
+			if (data) {
+				const { presignedUrl, fileId, fileName, fileType } = data;
+				const response = await fetch(presignedUrl, {
+					method: 'PUT',
+					headers: {
+						'Content-Type': file.type
+					},
+					body: file
+				});
+
+				if (response.ok) {
+					const { data: trigger, error: triggerErr } = await fetchPost({
+						url: '/api/document',
+						params: {
+							name,
+							fileId,
+							fileName,
+							fileType
+						}
+					});
+
+					if (triggerErr) {
+						showToastError(name);
+						isImgLoading = false;
+					} else {
+						toast.success(
+							`Great! "${name}" uploaded successfully. Parsing may take around 3-5 minutes, so feel free to continue working while we process your file.`
+						);
+						isImgLoading = false;
+					}
+				} else {
+					showToastError(name);
+					isImgLoading = false;
+				}
 			}
 		}
 	};
 </script>
 
 {#if isCollapsed}
-	<div class="py-7">
+	<div class="py-7 bg-background/95 bg-slate-100 p-2 backdrop-blur">
 		<div
 			data-collapsed={isCollapsed}
-			class="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2"
+			class="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2 "
 		>
 			<nav
 				class="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2"
@@ -129,12 +150,12 @@
 					>Upload CAM</Label
 				>
 				{#if isImgLoading}
-					<div class="flex w-full animate-pulse justify-center align-middle text-primary py-2">
+					<div class="flex w-full animate-pulse justify-center py-2 align-middle text-primary">
 						<span class="mr-1 animate-pulse">Uploading</span>
 						<Icons.loaderPinwheel class="h-6 w-6 animate-spin" />
 					</div>
 				{:else}
-					<Input id="cam-file" type="file" class="custom-file-input" on:change={handleFileChange} />
+					<Input id="cam-file" type="file" class="custom-file-input" on:change={handleFileChange} placeholder="xxx"/>
 				{/if}
 			</div>
 		</div>

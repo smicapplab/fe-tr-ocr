@@ -2,8 +2,6 @@
 	import * as Resizable from '$lib/components/ui/resizable';
 	import Nav from './(components)/nav.svelte';
 	import OcrList from './(components)/ocr-list.svelte';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
 	import { fetchGet } from '$lib/fetch-util';
 	import { toast } from 'svelte-sonner';
 	import { ocrListStore, selectedOcrStore } from '$lib/stores/ocr';

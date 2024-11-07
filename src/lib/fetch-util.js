@@ -3,14 +3,14 @@ const fetchError = async (/** @type {any} */ promise) => {
         const response = await promise;
         if (response.ok) {
             const awaitedData = await response.json();
-            return { data: awaitedData, error: null };
+            return { data: awaitedData };
         } else {
-            console.log(response)
-            return { data: null, error: "Error occurred while fetching URL" };
+            console.error(response)
+            return { error: "Error occurred while fetching URL" };
         }
     } catch (error) {
         console.error(error);
-        return { data: null, error };
+        return { error };
     }
 };
 

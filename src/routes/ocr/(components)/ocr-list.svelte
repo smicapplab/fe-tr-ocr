@@ -40,7 +40,6 @@
 	};
 
 	const fetchBanks = async () => {
-		console.log('Trigger', fetchBanks);
 		// isLoading = true;
 		// const { data } = await fetchGet(
 		// 	`/api/bank?name=${searchKey}&status=${$status}&cursor=${cursor}`
