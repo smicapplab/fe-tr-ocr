@@ -6,13 +6,7 @@ import { json } from '@sveltejs/kit';
 export const POST = async ({ request }) => {
     const { name, fileId, fileName, fileType } = await request.json();
     const url = `${PUBLIC_ISSUER_DOC_URL}/${fileName}`
-    console.log({
-        name,
-        fileId,
-        fileName,
-        fileType,
-        url
-    })
+
     const response = await fetchPost({
         url: `${PRI_AWS_TEXTTRACT_API}/document`,
         params: {
