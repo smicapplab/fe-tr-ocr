@@ -1,0 +1,52 @@
+{
+	"name": "fe-tr-ocr",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
+		"lint": "prettier --plugin-search-dir . --check . && eslint .",
+		"format": "prettier --plugin-search-dir . --write ."
+	},
+	"devDependencies": {
+		"@internationalized/date": "^3.5.6",
+		"@sveltejs/adapter-auto": "^3.2.5",
+		"@sveltejs/kit": "^2.7.1",
+		"@sveltejs/vite-plugin-svelte": "^3.1.2",
+		"@tailwindcss/typography": "^0.5.15",
+		"@types/eslint": "^9.6.1",
+		"autoprefixer": "^10.4.20",
+		"bits-ui": "^0.21.16",
+		"clsx": "^2.1.1",
+		"cmdk-sv": "^0.0.18",
+		"dotenv": "^16.4.5",
+		"eslint": "^9.12.0",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-svelte": "^2.44.1",
+		"globals": "^15.11.0",
+		"lucide-svelte": "^0.454.0",
+		"mode-watcher": "^0.4.1",
+		"paneforge": "^0.0.6",
+		"prettier": "^3.3.3",
+		"prettier-plugin-svelte": "^3.2.7",
+		"prettier-plugin-tailwindcss": "^0.6.8",
+		"svelte": "^4.2.19",
+		"svelte-check": "^4.0.5",
+		"svelte-radix": "^1.1.1",
+		"svelte-sonner": "^0.3.28",
+		"tailwind-merge": "^2.5.4",
+		"tailwind-variants": "^0.2.1",
+		"tailwindcss": "^3.4.13",
+		"typescript": "^5.6.3",
+		"vite": "^5.4.9"
+	},
+	"type": "module",
+	"dependencies": {
+		"@aws-sdk/client-s3": "^3.686.0",
+		"@aws-sdk/lib-storage": "^3.686.0",
+		"uuid": "^11.0.2"
+	}
+}
