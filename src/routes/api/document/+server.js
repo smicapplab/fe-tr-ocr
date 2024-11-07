@@ -7,7 +7,6 @@ import { json } from '@sveltejs/kit';
 
 export const POST = async ({ request }) => {
     const { name, data } = await request.json();
-
     let fileType = resolveFileType({ name, data });
     const fileId = uuidv4()
     const fileName = `pam/documents/${fileId}/${fileId}.${fileType}`
@@ -20,21 +19,6 @@ export const POST = async ({ request }) => {
     })
 
     const url = `${PUBLIC_ISSUER_DOC_URL}/${fileName}`
-
-
-    console.log({ url })
-
-    console.log({
-        url: `${PRI_AWS_TEXTTRACT_API}/document`,
-        params: {
-            name,
-            fileId,
-            fileName,
-            fileType,
-            url
-        }
-    })
-
     const response = await fetchPost({
         url: `${PRI_AWS_TEXTTRACT_API}/document`,
         params: {
@@ -45,7 +29,6 @@ export const POST = async ({ request }) => {
             url
         }
     });
-
     return json(response);
 };
 
