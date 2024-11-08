@@ -58,11 +58,22 @@ const config = {
 				sans: [...fontFamily.sans]
 			},
 			maxHeight: {
-				'screen-minus-100': 'calc(100vh - 100px)',  
-				'screen-minus-200': 'calc(100vh - 200px)',  
-				'screen-minus-300': 'calc(100vh - 300px)',  
-				'screen-minus-400': 'calc(100vh - 400px)',  
+				'screen-minus-100': 'calc(100vh - 100px)',
+				'screen-minus-200': 'calc(100vh - 200px)',
+				'screen-minus-300': 'calc(100vh - 300px)',
+				'screen-minus-400': 'calc(100vh - 400px)',
 			},
+			keyframes: {
+				shake: {
+					'10%, 90%': { transform: 'translateX(-1px)' },
+					'20%, 80%': { transform: 'translateX(2px)' },
+					'30%, 50%, 70%': { transform: 'translateX(-4px)' },
+					'40%, 60%': { transform: 'translateX(4px)' }
+				}
+			},
+			animation: {
+				shake: 'shake 0.5s ease-in-out'
+			}
 		}
 	},
 };

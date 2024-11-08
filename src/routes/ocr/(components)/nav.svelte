@@ -207,6 +207,3 @@
 		{/each}
 	</nav>
 </div>
-
-<style>
-</style>

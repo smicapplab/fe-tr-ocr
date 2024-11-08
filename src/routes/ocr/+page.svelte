@@ -2,7 +2,7 @@
 	import * as Resizable from '$lib/components/ui/resizable';
 	import Nav from './(components)/nav.svelte';
 	import OcrList from './(components)/ocr-list.svelte';
-	import { fetchGet, fetchPost } from '$lib/fetch-util';
+	import { fetchPost } from '$lib/fetch-util';
 	import { toast } from 'svelte-sonner';
 	import {
 		isOcrListLoading,
@@ -27,9 +27,6 @@
 
 	const fetchRecords = async () => {
 		isOcrListLoading.set(true);
-		// const { data, error } = await fetchGet(
-		// 	`/api/document?status=${$ocrStatusStore}&lastEvaluatedKey=${$lastEvalOcrStore}`
-		// );
 		const { data, error } = await fetchPost({
 			url: "/api/document/paginated",
 			params: {

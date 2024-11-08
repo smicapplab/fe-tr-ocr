@@ -3,7 +3,6 @@
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { Badge } from '$lib/components/ui/badge';
 	import { Input } from '$lib/components/ui/input/index';
-	import { Button } from '$lib/components/ui/button/index.js';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index';
 	import {
 		isOcrListLoading,
@@ -13,95 +12,40 @@
 		selectedOcrStore
 	} from '$lib/stores/ocr';
 	import { cn, formatName, formatTimeAgo } from '$lib/utils';
-	import { derived, writable } from 'svelte/store';
-	import { fetchGet } from '$lib/fetch-util';
+	import { derived, get, writable } from 'svelte/store';
 	import { Icons } from '$lib/components/ui/icons';
-	import { Plus } from 'lucide-svelte';
-	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import { onMount } from 'svelte';
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
 	import { Divider } from '$lib/components/ui/divider';
-	import { Dialog } from '$lib/components/ui/dialog';
-	import { DialogContent } from '$lib/components/ui/dialog';
-	import { DialogHeader } from '$lib/components/ui/dialog';
-	import { browser } from '$app/environment';
-	import { toast } from 'svelte-sonner';
 	import { ocrStatus } from '../config';
+	import { browser } from '$app/environment';
+	import { Button } from '$lib/components/ui/button';
 
 	export let fetchRecords;
 
-	let isDialogOpen = writable(false);
+	let isMounted = writable(false);
 	let searchKey = '';
-	let isLoading = false;
-	let cursor = 0;
-	let hasMore = false;
-	let totalCount = 0;
 
+	// Derive the status from the URL
 	const status = derived(page, ($page) => $page.url.searchParams.get('status') || '');
-	const openDialog = () => {
-		isDialogOpen.set(true);
-	};
 
-	const closeDialog = async () => {
-		isDialogOpen.set(false);
-	};
+	const loadMore = async () => {};
 
-	const fetchBanks = async () => {
-		// isLoading = true;
-		// const { data } = await fetchGet(
-		// 	`/api/bank?name=${searchKey}&status=${$status}&cursor=${cursor}`
-		// );
-		// const { banks, count } = data;
-		// totalCount = count;
-		// if (banks) {
-		// 	if (cursor === 0) {
-		// 		ocrListStore.set(banks);
-		// 		selectedOcrStore.set($ocrListStore[0]);
-		// 	} else {
-		// 		const newList = [...$ocrListStore, ...banks];
-		// 		ocrListStore.set(newList);
-		// 	}
-
-		// 	if ($ocrListStore.length === 0) {
-		// 		selectedOcrStore.set(null);
-		// 		hasMore = false;
-		// 	} else {
-		// 		hasMore = count > $ocrListStore.length;
-		// 	}
-		// }
-
-		isLoading = false;
-	};
-
-	// const fetchRecords = async () => {
-	// 	isLoading = true;
-	// 	const { data, error } = await fetchGet('/api/document');
-	// 	if (error) {
-	// 		toast.error(
-	// 			'We encountered an issue while reloading the data. Please try refreshing the page, or check your network connection if the issue persists.'
-	// 		);
-	// 	}
-	// 	ocrListStore.set(data);
-	// 	isLoading = false;
-	// };
-
-	// const loadMore = async () => {
-	// 	cursor++;
-	// 	await fetchBanks();
-	// };
-
-	$: if ($status) {
-		if (browser) {
-			ocrStatusStore.set($status);
-			lastEvalOcrStore.set(null);
-			fetchRecords();
-		}
+	// Reactive statement to fetch records when status changes (only after mount)
+	$: if (get(isMounted) && $status && browser) {
+		ocrStatusStore.set($status);
+		lastEvalOcrStore.set(null);
+		fetchRecords();
 	}
 
+	// onMount block for initial setup
 	onMount(() => {
-		lastEvalOcrStore.set(null);
-		ocrListStore.set([])
-		fetchRecords();
+		if (browser) {
+			lastEvalOcrStore.set(null);
+			ocrListStore.set([]);
+			fetchRecords();
+			isMounted.set(true); // Set isMounted to true after the initial fetch
+		}
 	});
 </script>
 
@@ -122,36 +66,26 @@
 	>
 </div>
 
-<Divider class="mb-10" />
-<!-- {#if totalCount > 0}
-	<div class="flex items-center justify-between px-3 py-2 text-sm">
-		<div>
-			showing {$ocrListStore?.length || 0} of {totalCount || 0}
-		</div>
-		{#if hasMore}
-			<Button variant="link" size="xs" on:click={loadMore} class="flex items-center">
-				Load More
-				{#if isLoading}
-					<Icons.loaderPinwheel class="ml-1 h-4 animate-spin" />
-				{:else}
-					<Icons.download class="ml-1 h-4" />
-				{/if}
-			</Button>
-		{/if}
+<Divider class={$lastEvalOcrStore ? 'mb-10' : 'mb-5'} />
+{#if $lastEvalOcrStore}
+	<div class="flex items-center justify-end px-3">
+		<Button variant="link" size="xs" on:click={loadMore} class="flex items-center">
+			Load More
+			{#if $isOcrListLoading}
+				<Icons.loaderPinwheel class="ml-1 h-4 animate-spin" />
+			{:else}
+				<Icons.download class="ml-1 h-4" />
+			{/if}
+		</Button>
 	</div>
-{:else if !isLoading}
-	<div class="mt-5 px-3 text-center text-secondary">No Records found</div>
-{/if} -->
+{/if}
 
 <ScrollArea class="h-full max-h-screen-minus-400">
 	<div class="flex flex-col gap-2 p-2 pt-2">
-		<!-- { originalFilename, currentStep, pk, sk, url } -->
 		{#if $isOcrListLoading}
-			<div class="space-y-2">
-				<Skeleton class="h-4 w-[250px] bg-neutral-400" />
-				<Skeleton class="h-4 w-[200px] bg-neutral-400" />
-				<Skeleton class="h-4 w-[300px] bg-neutral-400" />
-			</div>
+			<Skeleton class="flex h-10 flex-col items-start gap-2 rounded-lg bg-slate-300" />
+			<Skeleton class="flex h-10 flex-col items-start gap-2 rounded-lg bg-slate-300" />
+			<Skeleton class="flex h-10 flex-col items-start gap-2 rounded-lg bg-slate-300" />
 		{:else if $ocrListStore && $ocrListStore.length > 0}
 			{#each $ocrListStore as item}
 				{@const itemStatus = ocrStatus[item.currentStep]}
@@ -177,6 +111,8 @@
 					</Badge>
 				</button>
 			{/each}
+		{:else}
+			<div>Found No Records</div>
 		{/if}
 	</div>
 </ScrollArea>

@@ -63,15 +63,11 @@ const formatter = new Intl.RelativeTimeFormat(undefined, {
 });
 
 export const formatTimeAgo = (date) => {
-	console.log("---", date)
 	// Adjust date from UTC to GMT-8 by subtracting 8 hours
 	const adjustedDate = new Date(date.getTime() + 8 * 60 * 60 * 1000);
-	console.log("---", adjustedDate)
 	let duration = (adjustedDate.getTime() - new Date().getTime()) / 1000;
-	console.log("---", duration)
 	for (let i = 0; i <= DIVISIONS.length; i++) {
 		const division = DIVISIONS[i];
-		console.log("---", division)
 		if (Math.abs(duration) < division.amount) {
 			return formatter.format(Math.round(duration), division.name);
 		}
