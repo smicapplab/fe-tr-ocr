@@ -1,6 +1,7 @@
 <script>
 	import { selectedOcrStore } from '$lib/stores/ocr';
 	import { formatName, formatToFull } from '$lib/utils';
+	import { ocrStatus } from '../config';
 </script>
 
 <div class="grid grid-cols-3 gap-2 p-2">
@@ -24,7 +25,7 @@
 		<div>
 			<div class="font-bold">Extraction Stage</div>
 			<div class="col-span-2">
-				{$selectedOcrStore.currentStep}
+				{ocrStatus[$selectedOcrStore.currentStep].label}
 			</div>
 		</div>
 		<div>

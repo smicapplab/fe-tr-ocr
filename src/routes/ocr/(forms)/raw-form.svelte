@@ -6,9 +6,8 @@
 
 <div class="p-2">
 	<div class="bg-slate-200 px-2 py-5">
-		Displays the OCR form (key/value) extraction results with minor static corrections applied, but without
-		AI-based adjustments. This data serves as a preliminary baseline for model training and further
-		refinement.
+		Displays the OCR form (key/value) extraction results with minor static corrections applied, but
+		without the benefit of AI-based adjustments. These results serve as a preliminary baseline,
+		providing foundational data for subsequent model training and refinement
 	</div>
-	
 </div>

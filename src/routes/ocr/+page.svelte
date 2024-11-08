@@ -29,12 +29,12 @@
 	const fetchRecords = async () => {
 		isOcrListLoading.set(true);
 		const { data, error } = await fetchPost({
-			url: "/api/document/paginated",
+			url: '/api/document/paginated',
 			params: {
 				status: $ocrStatusStore,
-				lastEvaluatedKey: $lastEvalOcrStore,
+				lastEvaluatedKey: $lastEvalOcrStore
 			}
-		})
+		});
 
 		if (error) {
 			isOcrListLoading.set(false);
@@ -46,7 +46,7 @@
 			const { Items, LastEvaluatedKey } = data;
 			lastEvalOcrStore.set(LastEvaluatedKey ?? null);
 			if (Items && Items.length > 0) {
-				if ($ocrListStore && $ocrListStore.length > 0 ) {
+				if ($ocrListStore && $ocrListStore.length > 0) {
 					const newList = [...$ocrListStore, ...Items];
 					ocrListStore.set(newList);
 				} else {

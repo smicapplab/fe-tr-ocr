@@ -6,7 +6,8 @@
 
 <div class="p-2">
 	<div class="bg-slate-200 px-2 py-5">
-        Displays the final OCR table extraction with AI and context-based corrections applied. While significantly improved, the model still requires additional data for further training and optimization.
+		Displays the final OCR table extraction with AI and context-based corrections applied. While
+		significantly improved, the model still requires additional data for further training and
+		optimization.
 	</div>
-	
 </div>
