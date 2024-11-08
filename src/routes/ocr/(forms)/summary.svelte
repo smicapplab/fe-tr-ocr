@@ -30,7 +30,9 @@
 		</div>
 		<div>
 			<div class="font-bold">Confidence Score</div>
-			<div class="col-span-2">...</div>
+			<div class="col-span-2">
+				{$selectedOcrStore.confidence ? Math.floor($selectedOcrStore.confidence) : '-'}
+			</div>
 		</div>
 		<div>
 			<div class="font-bold">Date Uploaded</div>

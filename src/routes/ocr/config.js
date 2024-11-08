@@ -1,5 +1,5 @@
 import { Icons } from "$lib/components/ui/icons";
-import { BookOpenCheck, BookText, FilePenLine, Grid3x3, Info, RefreshCcw } from "lucide-svelte";
+import { Album, BookOpenCheck, BookText, BookUp2, FilePenLine, Grid3x3, Info, RefreshCcw } from "lucide-svelte";
 
 export const ocrStatus = {
     PENDING: {
@@ -14,9 +14,13 @@ export const ocrStatus = {
         label: "Extracted",
         icon: BookOpenCheck
     },
+    "PARTIAL:REFINED": {
+        label: "Extracted",
+        icon: BookUp2
+    },
     "PARTIAL:RESOLVED": {
         label: "Extracted",
-        icon: BookOpenCheck
+        icon: Album
     },
 }
 
