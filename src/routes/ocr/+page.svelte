@@ -2,9 +2,15 @@
 	import * as Resizable from '$lib/components/ui/resizable';
 	import Nav from './(components)/nav.svelte';
 	import OcrList from './(components)/ocr-list.svelte';
-	import { fetchGet } from '$lib/fetch-util';
+	import { fetchGet, fetchPost } from '$lib/fetch-util';
 	import { toast } from 'svelte-sonner';
-	import { ocrListStore, selectedOcrStore } from '$lib/stores/ocr';
+	import {
+		isOcrListLoading,
+		lastEvalOcrStore,
+		ocrListStore,
+		ocrStatusStore,
+		selectedOcrStore
+	} from '$lib/stores/ocr';
 
 	let navCollapsedSize = 4;
 	let defaultLayout = [150, 160, 655];
@@ -20,14 +26,42 @@
 	}
 
 	const fetchRecords = async () => {
-		const { data, error } = await fetchGet('/api/document');
+		isOcrListLoading.set(true);
+		// const { data, error } = await fetchGet(
+		// 	`/api/document?status=${$ocrStatusStore}&lastEvaluatedKey=${$lastEvalOcrStore}`
+		// );
+		const { data, error } = await fetchPost({
+			url: "/api/document/paginated",
+			params: {
+				status: $ocrStatusStore,
+				lastEvaluatedKey: $lastEvalOcrStore,
+			}
+		})
+
 		if (error) {
+			isOcrListLoading.set(false);
 			toast.error(
 				'We encountered an issue while reloading the data. Please try refreshing the page, or check your network connection if the issue persists.'
 			);
 		}
-		ocrListStore.set(data);
-		selectedOcrStore.set(data[0])
+		if (data) {
+			const { Items, LastEvaluatedKey } = data;
+			if (Items && Items.length > 0) {
+				if ($lastEvalOcrStore) {
+					const newList = [...$ocrListStore, ...Items];
+					ocrListStore.set(newList);
+				} else {
+					ocrListStore.set(Items);
+					lastEvalOcrStore.set(LastEvaluatedKey);
+					selectedOcrStore.set($lastEvalOcrStore[0]);
+				}
+			} else {
+				ocrListStore.set([]);
+				lastEvalOcrStore.set(null);
+				selectedOcrStore.set(null);
+			}
+		}
+		isOcrListLoading.set(false);
 	};
 </script>
 

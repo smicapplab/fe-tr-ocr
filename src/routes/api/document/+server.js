@@ -1,6 +1,6 @@
 import { PRI_AWS_TEXTTRACT_API } from '$env/static/private';
 import { PUBLIC_ISSUER_DOC_URL } from '$env/static/public';
-import { fetchGet, fetchPost } from '$lib/fetch-util';
+import { fetchPost } from '$lib/fetch-util';
 import { json } from '@sveltejs/kit';
 
 export const POST = async ({ request }) => {
@@ -18,9 +18,4 @@ export const POST = async ({ request }) => {
         }
     });
     return json(response);
-};
-
-export const GET = async () => {
-    const response = await fetchGet(`${PRI_AWS_TEXTTRACT_API}/document`);
-    return json(response?.data);
 };

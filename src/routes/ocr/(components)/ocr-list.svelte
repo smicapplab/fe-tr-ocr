@@ -5,8 +5,14 @@
 	import { Input } from '$lib/components/ui/input/index';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index';
-	import { ocrListStore, selectedOcrStore } from '$lib/stores/ocr';
-	import { cn } from '$lib/utils';
+	import {
+		isOcrListLoading,
+		lastEvalOcrStore,
+		ocrListStore,
+		ocrStatusStore,
+		selectedOcrStore
+	} from '$lib/stores/ocr';
+	import { cn, formatName, formatTimeAgo } from '$lib/utils';
 	import { derived, writable } from 'svelte/store';
 	import { fetchGet } from '$lib/fetch-util';
 	import { Icons } from '$lib/components/ui/icons';
@@ -20,6 +26,7 @@
 	import { DialogHeader } from '$lib/components/ui/dialog';
 	import { browser } from '$app/environment';
 	import { toast } from 'svelte-sonner';
+	import { ocrStatus } from '../config';
 
 	export let fetchRecords;
 
@@ -85,11 +92,15 @@
 
 	$: if ($status) {
 		if (browser) {
+			ocrStatusStore.set($status);
+			lastEvalOcrStore.set(null);
 			fetchRecords();
 		}
 	}
 
 	onMount(() => {
+		lastEvalOcrStore.set(null);
+		ocrListStore.set([])
 		fetchRecords();
 	});
 </script>
@@ -132,11 +143,18 @@
 	<div class="mt-5 px-3 text-center text-secondary">No Records found</div>
 {/if} -->
 
-<ScrollArea class="max-h-screen-minus-400 h-full">
+<ScrollArea class="h-full max-h-screen-minus-400">
 	<div class="flex flex-col gap-2 p-2 pt-2">
 		<!-- { originalFilename, currentStep, pk, sk, url } -->
-		{#if $ocrListStore && $ocrListStore.length > 0}
+		{#if $isOcrListLoading}
+			<div class="space-y-2">
+				<Skeleton class="h-4 w-[250px] bg-neutral-400" />
+				<Skeleton class="h-4 w-[200px] bg-neutral-400" />
+				<Skeleton class="h-4 w-[300px] bg-neutral-400" />
+			</div>
+		{:else if $ocrListStore && $ocrListStore.length > 0}
 			{#each $ocrListStore as item}
+				{@const itemStatus = ocrStatus[item.currentStep]}
 				<button
 					class={cn(
 						'flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent',
@@ -144,20 +162,19 @@
 					)}
 					on:click={() => selectedOcrStore.set(item)}
 				>
-					<div class="flex w-full flex-col gap-1">
-						<div class="flex items-center">
-							<div class="flex items-center gap-2">
-								<div class="font-semibold text-xs">{item.originalFilename}</div>
-							</div>
-							<div
-								class={cn(
-									'ml-auto text-xs',
-									$selectedOcrStore.sk === item.sk ? 'text-foreground' : 'text-muted-foreground'
-								)}
-							></div>
-						</div>
-					</div>
-					<Badge variant="outline">{item.currentStep}</Badge>
+					<div class="font-semibold">{formatName(item.form?.accountName || '')}</div>
+					<div class="font-light">Uploaded {formatTimeAgo(new Date(item.sk))}</div>
+					<Badge variant="outline">
+						<svelte:component
+							this={itemStatus.icon}
+							class={cn(
+								'mr-2 size-4',
+								['PENDING', 'PARTIAL:BLOCKS'].includes(item.currentStep) && 'animate-spin'
+							)}
+							aria-hidden="true"
+						/>
+						{itemStatus.label}
+					</Badge>
 				</button>
 			{/each}
 		{/if}

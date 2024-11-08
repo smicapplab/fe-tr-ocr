@@ -46,3 +46,50 @@ export const flyAndScale = (
 		easing: cubicOut
 	};
 };
+
+
+const DIVISIONS = [
+	{ amount: 60, name: "seconds" },
+	{ amount: 60, name: "minutes" },
+	{ amount: 24, name: "hours" },
+	{ amount: 7, name: "days" },
+	{ amount: 4.34524, name: "weeks" },
+	{ amount: 12, name: "months" },
+	{ amount: Number.POSITIVE_INFINITY, name: "years" },
+];
+
+const formatter = new Intl.RelativeTimeFormat(undefined, {
+	numeric: "auto",
+});
+
+export const formatTimeAgo = (date) => {
+	console.log("---", date)
+	// Adjust date from UTC to GMT-8 by subtracting 8 hours
+	const adjustedDate = new Date(date.getTime() + 8 * 60 * 60 * 1000);
+	console.log("---", adjustedDate)
+	let duration = (adjustedDate.getTime() - new Date().getTime()) / 1000;
+	console.log("---", duration)
+	for (let i = 0; i <= DIVISIONS.length; i++) {
+		const division = DIVISIONS[i];
+		console.log("---", division)
+		if (Math.abs(duration) < division.amount) {
+			return formatter.format(Math.round(duration), division.name);
+		}
+		duration /= division.amount;
+	}
+}
+
+export const formatName = (name) => {
+	return name
+	  .toLowerCase() // Convert entire string to lowercase
+	  .split(' ') // Split by spaces
+	  .map((word) => {
+		// Capitalize the first letter of each word
+		if (word.length > 1) {
+		  return word.charAt(0).toUpperCase() + word.slice(1);
+		}
+		// Handle initials (like "N.")
+		return word.toUpperCase();
+	  })
+	  .join(' '); // Join the words back into a string
+  }

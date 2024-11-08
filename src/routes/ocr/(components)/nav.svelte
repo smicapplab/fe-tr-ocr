@@ -9,7 +9,7 @@
 	import { cn } from '$lib/utils';
 	import { derived } from 'svelte/store';
 	import Divider from '$lib/components/ui/divider/divider.svelte';
-	import { fetchGet, fetchPost } from '$lib/fetch-util';
+	import { fetchPost } from '$lib/fetch-util';
 	import { toast } from 'svelte-sonner';
 	export let isCollapsed;
 
@@ -64,8 +64,6 @@
 				url: `/api/upload/`,
 				params: { name }
 			});
-
-			//console.log({ data, error });
 
 			if (error) {
 				showToastError(name);
