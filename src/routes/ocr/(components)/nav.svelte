@@ -99,6 +99,8 @@
 							`Great! "${name}" uploaded successfully. Parsing may take around 3-5 minutes, so feel free to continue working while we process your file.`
 						);
 						isImgLoading = false;
+						await goto('/ocr?status=recent');
+						location.reload();
 					}
 				} else {
 					showToastError(name);
@@ -110,10 +112,10 @@
 </script>
 
 {#if isCollapsed}
-	<div class="py-7 bg-background/95 bg-slate-100 p-2 backdrop-blur">
+	<div class="bg-background/95 bg-slate-100 p-2 py-7 backdrop-blur">
 		<div
 			data-collapsed={isCollapsed}
-			class="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2 "
+			class="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2"
 		>
 			<nav
 				class="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2"
@@ -153,7 +155,13 @@
 						<Icons.loaderPinwheel class="h-6 w-6 animate-spin" />
 					</div>
 				{:else}
-					<Input id="cam-file" type="file" class="custom-file-input" on:change={handleFileChange} placeholder="xxx"/>
+					<Input
+						id="cam-file"
+						type="file"
+						class="custom-file-input"
+						on:change={handleFileChange}
+						placeholder="xxx"
+					/>
 				{/if}
 			</div>
 		</div>

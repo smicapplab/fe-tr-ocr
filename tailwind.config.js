@@ -73,6 +73,9 @@ const config = {
 			},
 			animation: {
 				shake: 'shake 0.5s ease-in-out'
+			},
+			height: {
+				'3/4-screen': '75vh'
 			}
 		}
 	},

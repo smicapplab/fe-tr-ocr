@@ -29,11 +29,14 @@
 	// Derive the status from the URL
 	const status = derived(page, ($page) => $page.url.searchParams.get('status') || '');
 
-	const loadMore = async () => {};
+	const loadMore = async () => {
+		await fetchRecords();
+	};
 
 	// Reactive statement to fetch records when status changes (only after mount)
 	$: if (get(isMounted) && $status && browser) {
 		ocrStatusStore.set($status);
+		ocrListStore.set([]);
 		lastEvalOcrStore.set(null);
 		fetchRecords();
 	}
@@ -47,6 +50,10 @@
 			isMounted.set(true); // Set isMounted to true after the initial fetch
 		}
 	});
+
+	const isPending = (currentStep) => {
+		return ['PENDING', 'PARTIAL:BLOCKS'].includes(currentStep);
+	};
 </script>
 
 <div class="bg-background/95 bg-slate-100 p-2 backdrop-blur">
@@ -66,9 +73,10 @@
 	>
 </div>
 
-<Divider class={$lastEvalOcrStore ? 'mb-10' : 'mb-5'} />
-{#if $lastEvalOcrStore}
-	<div class="flex items-center justify-end px-3">
+<Divider class="mb-5" />
+{#if $lastEvalOcrStore && $lastEvalOcrStore.trim() !== 'undefined'}
+	<div class="flex items-center justify-between px-3 py-2 text-sm">
+		<div>showing {$ocrListStore.length} records</div>
 		<Button variant="link" size="xs" on:click={loadMore} class="flex items-center">
 			Load More
 			{#if $isOcrListLoading}
@@ -96,15 +104,18 @@
 					)}
 					on:click={() => selectedOcrStore.set(item)}
 				>
-					<div class="font-semibold">{formatName(item.form?.accountName || '')}</div>
+					<div class="font-semibold">
+						{#if isPending(item.currentStep)}
+							<span class="animate-pulse text-xs">{item.originalFilename}</span>
+						{:else}
+							{formatName(item.form?.accountName || item.form?.businessName)}
+						{/if}
+					</div>
 					<div class="font-light">Uploaded {formatTimeAgo(new Date(item.sk))}</div>
 					<Badge variant="outline">
 						<svelte:component
 							this={itemStatus.icon}
-							class={cn(
-								'mr-2 size-4',
-								['PENDING', 'PARTIAL:BLOCKS'].includes(item.currentStep) && 'animate-spin'
-							)}
+							class={cn('mr-2 size-4', isPending(item.currentStep) && 'animate-spin')}
 							aria-hidden="true"
 						/>
 						{itemStatus.label}

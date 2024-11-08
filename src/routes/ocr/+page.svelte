@@ -11,9 +11,10 @@
 		ocrStatusStore,
 		selectedOcrStore
 	} from '$lib/stores/ocr';
+	import OcrInfo from './(components)/ocr-info.svelte';
 
 	let navCollapsedSize = 4;
-	let defaultLayout = [150, 160, 655];
+	let defaultLayout = [150, 200, 655];
 	let defaultCollapsed = false;
 	let isCollapsed = defaultCollapsed;
 
@@ -43,14 +44,14 @@
 		}
 		if (data) {
 			const { Items, LastEvaluatedKey } = data;
+			lastEvalOcrStore.set(LastEvaluatedKey ?? null);
 			if (Items && Items.length > 0) {
-				if ($lastEvalOcrStore) {
+				if ($ocrListStore && $ocrListStore.length > 0 ) {
 					const newList = [...$ocrListStore, ...Items];
 					ocrListStore.set(newList);
 				} else {
 					ocrListStore.set(Items);
-					lastEvalOcrStore.set(LastEvaluatedKey);
-					selectedOcrStore.set($lastEvalOcrStore[0]);
+					selectedOcrStore.set($ocrListStore[0]);
 				}
 			} else {
 				ocrListStore.set([]);
@@ -75,10 +76,12 @@
 		<Nav {isCollapsed} />
 	</Resizable.Pane>
 	<Resizable.Handle withHandle />
-	<Resizable.Pane defaultSize={defaultLayout[1]} minSize={15} maxSize={20}>
+	<Resizable.Pane defaultSize={defaultLayout[1]} minSize={15} maxSize={25}>
 		<OcrList {fetchRecords} />
 	</Resizable.Pane>
 	<Resizable.Handle withHandle />
 
-	<Resizable.Pane defaultSize={defaultLayout[2]}>xxxx</Resizable.Pane>
+	<Resizable.Pane defaultSize={defaultLayout[2]}>
+		<OcrInfo />
+	</Resizable.Pane>
 </Resizable.PaneGroup>
