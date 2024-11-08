@@ -21,28 +21,28 @@ export const ocrStatus = {
 }
 
 export const infoMenus = [
-	{
-		title: "Summary",
-		form: "summary",
-		icon: Info,
-		variant: "default",
-	},
-	{
-		title: "Raw Extracted Tables",
-		form: "rawTable",
-		icon: Grid3x3,
-		variant: "ghost",
-	},
     {
-		title: "Raw Extracted Forms",
-		form: "rawForm",
-		icon: BookText,
-		variant: "ghost",
-	},
+        title: "Summary",
+        form: "summary",
+        icon: Info,
+        variant: "default",
+    },
     {
-		title: "Digital Form",
-		form: "form",
-		icon: FilePenLine,
-		variant: "",
-	}
+        title: "Raw Tables",
+        form: "rawTable",
+        icon: Grid3x3,
+        variant: "ghost",
+    },
+    {
+        title: "Raw Forms",
+        form: "rawForm",
+        icon: BookText,
+        variant: "ghost",
+    },
+    {
+        title: "Digital Form",
+        form: "editForm",
+        icon: FilePenLine,
+        variant: "",
+    }
 ]
