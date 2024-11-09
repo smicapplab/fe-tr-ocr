@@ -119,7 +119,7 @@
 							aria-hidden="true"
 						/>
 						{itemStatus.label}
-					</Badge>
+					</Badge> 
 				</button>
 			{/each}
 		{:else}

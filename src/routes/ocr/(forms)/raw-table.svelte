@@ -10,23 +10,25 @@
 		AI-based adjustments. This data serves as a preliminary baseline for model training and further
 		refinement.
 	</div>
-	{#each $selectedOcrStore.table as table}
-		<div class="py-5">
-			<Card.Root class="w-full">
-                <Card.Content>
-				<Table.Root>
-					<Table.Body>
-						{#each table as tableItem}
-							<Table.Row class="w-full text-sm">
-								{#each tableItem as row}
-									<Table.Cell>{row}</Table.Cell>
+	{#if $selectedOcrStore.table}
+		{#each $selectedOcrStore.table as table}
+			<div class="py-5">
+				<Card.Root class="w-full">
+					<Card.Content>
+						<Table.Root>
+							<Table.Body>
+								{#each table as tableItem}
+									<Table.Row class="w-full text-sm">
+										{#each tableItem as row}
+											<Table.Cell>{row}</Table.Cell>
+										{/each}
+									</Table.Row>
 								{/each}
-							</Table.Row>
-						{/each}
-					</Table.Body>
-				</Table.Root>
-                </Card.Content>
-			</Card.Root>
-		</div>
-	{/each}
+							</Table.Body>
+						</Table.Root>
+					</Card.Content>
+				</Card.Root>
+			</div>
+		{/each}
+	{/if}
 </div>

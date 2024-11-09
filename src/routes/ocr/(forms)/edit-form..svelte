@@ -11,3 +11,7 @@
 		optimization.
 	</div>
 </div>
+
+<div class="flex items-center justify-center text-center py-40">
+    Insufficient data to train the LLM model. Additional OCR-processed files are required to optimize and fine-tune the engine.
+</div>
