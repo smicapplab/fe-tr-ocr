@@ -64,12 +64,12 @@
 				<Icons.search
 					class="absolute left-2 top-[50%] h-4 w-4 translate-y-[-50%] text-muted-foreground"
 				/>
-				<Input class="w-full pl-8" bind:value={searchKey} />
+				<Input class="w-full pl-8" bind:value={searchKey} placeholder="Disabled for demo" disabled={true}/>
 			</div>
 		</div>
 	</form>
 	<span class="overflow-hidden text-ellipsis whitespace-nowrap text-xs italic"
-		>Enter Customer name and hit 'Enter' to search.</span
+		>Enter business or account name and hit 'Enter' to search.</span
 	>
 </div>
 
