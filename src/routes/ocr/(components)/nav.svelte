@@ -11,6 +11,8 @@
 	import Divider from '$lib/components/ui/divider/divider.svelte';
 	import { fetchPost } from '$lib/fetch-util';
 	import { toast } from 'svelte-sonner';
+	import { onMount } from 'svelte';
+	import { ocrCountStore } from '$lib/stores/ocr';
 	export let isCollapsed;
 
 	let isImgLoading = false;
@@ -47,10 +49,19 @@
 		return $page.url.searchParams.get('status') || 'all';
 	});
 
+	const limit = derived(ocrCountStore, ($ocrCountStore) => 42 - $ocrCountStore);
+
 	const showToastError = (name) => {
 		toast.error(
 			`Oops! We ran into an issue uploading your file "${name}". Please check your connection and try again.`
 		);
+	};
+
+	const updateCount = async () => {
+		const { data: countData } = await fetchPost({
+			url: '/api/document/count'
+		});
+		ocrCountStore.set(countData.data);
 	};
 
 	const handleFileChange = async (event) => {
@@ -102,6 +113,8 @@
 						await goto('/ocr?status=recent');
 						location.reload();
 					}
+
+					await updateCount();
 				} else {
 					showToastError(name);
 					isImgLoading = false;
@@ -109,6 +122,10 @@
 			}
 		}
 	};
+
+	onMount(async () => {
+		await updateCount();
+	});
 </script>
 
 {#if isCollapsed}
@@ -156,6 +173,7 @@
 					</div>
 				{:else}
 					<Input
+						disabled={$limit <= 0}
 						id="cam-file"
 						type="file"
 						class="custom-file-input"
@@ -213,5 +231,13 @@
 				</Button>
 			{/if}
 		{/each}
+
+		{#if $ocrCountStore}
+			<div class="py-10 text-center text-xs">
+				<div class="bg-orange-50 p-2 text-center text-xs">
+					{$limit} uploads left
+				</div>
+			</div>
+		{/if}
 	</nav>
 </div>

@@ -5,3 +5,5 @@ export const ocrListStore = writable([])
 export const selectedOcrStore = writable()
 export const lastEvalOcrStore = writable()
 export const ocrStatusStore = writable()
+
+export const ocrCountStore = writable()
