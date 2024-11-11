@@ -4,7 +4,6 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { fetchPost } from '$lib/fetch-util';
-	import { redirect } from '@sveltejs/kit';
 
 	/**
 	 * @type {any}
