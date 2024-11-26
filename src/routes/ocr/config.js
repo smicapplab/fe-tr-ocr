@@ -1,4 +1,4 @@
-import { Album, BookOpenCheck, BookText, BookUp2, FilePenLine, Grid3x3, Info, NotebookPen, RefreshCcw } from "lucide-svelte";
+import { Album, BookOpenCheck, BookText, BookUp2, FilePenLine, Grid3x3, Info, NotebookPen, RefreshCcw, Shapes } from "lucide-svelte";
 
 export const ocrStatus = {
     PENDING: {
@@ -20,6 +20,10 @@ export const ocrStatus = {
     "PARTIAL:RESOLVED": {
         label: "Extracted",
         icon: Album
+    },
+    "PARTIAL:CLASSIFIED": {
+        label: "Classified",
+        icon: Shapes
     },
 }
 

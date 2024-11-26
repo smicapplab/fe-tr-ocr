@@ -23,11 +23,52 @@
 			</div>
 		</div>
 		<div>
+			<div class="font-bold">Category</div>
+			<div class="col-span-2">
+				{$selectedOcrStore.category || "-"}
+			</div>
+		</div>
+		<div>
+			<div class="font-bold">Classification</div>
+			<div class="col-span-2">
+				{$selectedOcrStore.classification || "-"}
+			</div>
+		</div>
+		<div>
+			<div class="font-bold">Summary</div>
+			<div class="col-span-2">
+				{$selectedOcrStore.summary || "-"}
+			</div>
+		</div>
+		<div>
 			<div class="font-bold">Extraction Stage</div>
 			<div class="col-span-2">
 				{ocrStatus[$selectedOcrStore.currentStep].label}
 			</div>
 		</div>
+		{#if $selectedOcrStore.relevantDates && $selectedOcrStore.relevantDates.length > 0}
+			<div>
+				<div class="font-bold">Relevant Dates</div>
+				<div class="col-span-2">
+					{#each $selectedOcrStore.relevantDates as { date, label }}
+						<p class="text-xs"><span class="font-bold">{label}:</span> {date}</p>
+					{/each}
+				</div>
+			</div>
+		{/if}
+		{#if $selectedOcrStore.contact && $selectedOcrStore.contact.length > 0}
+			<div>
+				<div class="font-bold">Contact</div>
+				<div class="col-span-2">
+					{#each $selectedOcrStore.contact as { fullName, number, email }}
+						<div class="py-2 text-xs">
+							<p class="font-bold">{fullName}</p>
+							<p>{number || '-'} | {email || '-'}</p>
+						</div>
+					{/each}
+				</div>
+			</div>
+		{/if}
 		<div>
 			<div class="font-bold">Confidence Score</div>
 			<div class="col-span-2">

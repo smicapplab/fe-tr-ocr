@@ -118,7 +118,7 @@
 							class={cn('mr-2 size-4', isPending(item.currentStep) && 'animate-spin')}
 							aria-hidden="true"
 						/>
-						{itemStatus.label}
+						{itemStatus.label || "-"}
 					</Badge> 
 				</button>
 			{/each}
