@@ -34,12 +34,12 @@
 	};
 
 	const parseData = async () => {
-		const {data, error} = await fetchPost({
+		const { data, error } = await fetchPost({
 			url: `/api/document/parse`,
 			params: {
 				jobId: $selectedOcrStore.gsi1pk
 			}
-		})
+		});
 	};
 </script>
 
@@ -51,11 +51,11 @@
 		AI-driven context analysis are not applied in this demo.
 	</div>
 
-	{#if $selectedOcrStore.handwritten}
-		<h1 class={cn('p-2 py-5 text-lg text-white', badgeBg[getConfidenceCategory(aveScore)])}>
-			Ave Score: {aveScore}
-		</h1>
+	<h1 class={cn('p-2 py-5 text-lg text-white', badgeBg[getConfidenceCategory(aveScore)])}>
+		Ave Score: {aveScore}
+	</h1>
 
+	{#if $selectedOcrStore?.handwritten}
 		<Table.Root>
 			<Table.Header>
 				<Table.Row>
@@ -79,7 +79,5 @@
 				{/each}
 			</Table.Body>
 		</Table.Root>
-	{:else}
-		<Button on:click={parseData}>Fetch</Button>
 	{/if}
 </div>
