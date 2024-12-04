@@ -152,7 +152,7 @@
 						</label>
 					</Tooltip.Trigger>
 					<Tooltip.Content side="right" class="flex items-center gap-4 bg-neutral-600 text-white">
-						Upload Unstructired/Untrained Document
+						Upload Document
 					</Tooltip.Content>
 				</Tooltip.Root>
 			</nav>
@@ -164,7 +164,7 @@
 		<div class="flex items-center">
 			<div class="relative flex-grow">
 				<Label for="cam-file" class="overflow-hidden text-ellipsis whitespace-nowrap font-bold"
-					>Upload Unstructired/Untrained Document</Label
+					>Upload Document</Label
 				>
 				{#if isImgLoading}
 					<div class="flex w-full animate-pulse justify-center py-2 align-middle text-primary">
