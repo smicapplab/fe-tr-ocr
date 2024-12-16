@@ -49,7 +49,7 @@
 		return $page.url.searchParams.get('status') || 'all';
 	});
 
-	const limit = derived(ocrCountStore, ($ocrCountStore) => 52 - $ocrCountStore);
+	const limit = derived(ocrCountStore, ($ocrCountStore) => 42 - $ocrCountStore);
 
 	const showToastError = (name) => {
 		toast.error(
@@ -232,7 +232,7 @@
 			{/if}
 		{/each}
 
-		<!-- {#if !isCollapsed}
+		{#if !isCollapsed}
 			{#if $ocrCountStore}
 				<div class="py-10 text-center text-xs">
 					<div class="bg-orange-50 p-2 text-center text-xs">
@@ -240,6 +240,6 @@
 					</div>
 				</div>
 			{/if}
-		{/if} -->
+		{/if}
 	</nav>
 </div>
