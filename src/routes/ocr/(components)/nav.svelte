@@ -49,7 +49,7 @@
 		return $page.url.searchParams.get('status') || 'all';
 	});
 
-	const limit = derived(ocrCountStore, ($ocrCountStore) => 142 - $ocrCountStore);
+	const limit = derived(ocrCountStore, ($ocrCountStore) => 42 - $ocrCountStore);
 
 	const showToastError = (name) => {
 		toast.error(
